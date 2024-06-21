@@ -9,7 +9,7 @@ class EmojiMemoryGame: ObservableObject {
     private static let emojis = ["👻", "🧑‍🚒", "📡", "🧪", "🤘🏻", "🥳", "5️⃣", "💡", "💰"];
     
     private static func createMemoryGame() -> MemoryGame<String> {
-        return MemoryGame(numberOfPairsOfCards: 9) { pairIndex in
+        return MemoryGame(numberOfPairsOfCards: 12) { pairIndex in
             if (emojis.indices.contains(pairIndex)) {
                 return emojis[pairIndex];
             }
@@ -39,6 +39,4 @@ class EmojiMemoryGame: ObservableObject {
         model.shuffle();
         objectWillChange.send()
     }
-    
-    
 }
