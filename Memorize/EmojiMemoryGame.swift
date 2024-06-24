@@ -5,11 +5,13 @@ import SwiftUI
 // this is an example of full separation: only this VM can access the Model
 class EmojiMemoryGame: ObservableObject {
     
+    typealias Card = MemoryGame<String>.Card;
+    
     // static so that this is global, but only in this class (variables are not initialized in order)
     private static let emojis = ["👻", "🧑‍🚒", "📡", "🧪", "🤘🏻", "🥳", "5️⃣", "💡", "💰"];
     
     private static func createMemoryGame() -> MemoryGame<String> {
-        return MemoryGame(numberOfPairsOfCards: 12) { pairIndex in
+        return MemoryGame(numberOfPairsOfCards: 2) { pairIndex in
             if (emojis.indices.contains(pairIndex)) {
                 return emojis[pairIndex];
             }
@@ -25,13 +27,17 @@ class EmojiMemoryGame: ObservableObject {
     // -------------
     // what the view can use:
     
-    var cards : Array<MemoryGame<String>.Card> {
-        return model.cards;
+    var cards : Array<Card> {
+        model.cards;
+    }
+    
+    var color: Color {
+        .cyan;
     }
     
     // MARK: - Intents:
     
-    func chooseCard(_ card: MemoryGame<String>.Card) {
+    func chooseCard(_ card: Card) {
         model.chooseCard(card);
     }
     

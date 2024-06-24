@@ -53,7 +53,7 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         
         // unique id that needs to be hashable
         var id: String
-        var isFaceUp = false
+        var isFaceUp = true
         var isMatched = false
         let content: CardContent
         
