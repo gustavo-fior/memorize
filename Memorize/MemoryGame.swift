@@ -3,6 +3,7 @@ import Foundation
 struct MemoryGame<CardContent> where CardContent: Equatable {
     // only setting is private, read isn't
     private(set) var cards: Array<Card>
+    private(set) var score = 0
     
     init (numberOfPairsOfCards: Int, cardContentFactory: (Int) -> CardContent) {
         cards = [];
@@ -31,6 +32,16 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
                     if cards[chosenIndex].content == cards[potentialMatchIndex].content {
                         cards[chosenIndex].isMatched = true;
                         cards[potentialMatchIndex].isMatched = true;
+                        
+                        score += 2
+                    } else {
+                        if cards[chosenIndex].hasBeenSeen {
+                            score -= 1
+                        }
+                        
+                        if cards[potentialMatchIndex].hasBeenSeen {
+                            score -= 1
+                        }
                     }
                 } else {
                     indexOfTheOnlyCardFacingUp = chosenIndex;
@@ -53,8 +64,18 @@ struct MemoryGame<CardContent> where CardContent: Equatable {
         
         // unique id that needs to be hashable
         var id: String
-        var isFaceUp = true
+        
+        // property observers (before set and after set), basically generating the value for another property (hasBeenSeen) from the change of another
+        var isFaceUp = false {
+            didSet {
+                if oldValue && !isFaceUp {
+                    hasBeenSeen = true
+                }
+            }
+        }
+        
         var isMatched = false
+        var hasBeenSeen = false
         let content: CardContent
         
         // basically a ToString()

@@ -1,6 +1,9 @@
 import SwiftUI
 
 struct EmojiMemoryGameView: View {
+    // type alias
+    typealias Card = MemoryGame<String>.Card;
+    
     // @ObservedObject so that the view listens to the changes here
     // better name would be memoryGame
     @ObservedObject var viewModel: EmojiMemoryGame
@@ -10,23 +13,48 @@ struct EmojiMemoryGameView: View {
     var body: some View {
         VStack {
             cards
-                .animation(.default, value: viewModel.cards )
                 .foregroundColor(viewModel.color)
-            Button("Shuffle") {
+            HStack {
+                score
+                Spacer()
+                shuffle
+            }
+            .font(.title3)
+        }
+        .padding()
+    }
+    
+    private var score: some View {
+        Text("Score: \(viewModel.score)")
+        // implicit animation to don't animate
+            .animation(nil)
+    }
+    
+    private var shuffle: some View {
+        Button("Shuffle") {
+            
+            // animating explicitily
+            withAnimation {
                 viewModel.shuffle()
             }
         }
-        .padding()
     }
     
     private var cards: some View {
         AspectVGrid(viewModel.cards, aspectRatio: aspectRatio) { card in
             CardView(card)
                 .padding(4)
+                .overlay(FlyingNumber(number: scoreChange(causedBy: card)))
                 .onTapGesture {
-                    viewModel.chooseCard(card)
+                    withAnimation {
+                        viewModel.chooseCard(card)
+                    }
                 }
         }
+    }
+    
+    private func scoreChange(causedBy card: Card) -> Int {
+        0
     }
 }
 
